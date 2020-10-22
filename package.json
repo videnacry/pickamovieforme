@@ -1,0 +1,25 @@
+{
+  "name": "pickamovieforme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://code.assemblerschool.com/Pick_a_movie_for_me/pickamovieforme.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
