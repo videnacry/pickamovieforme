@@ -24,19 +24,19 @@ const user = app => {
   })
 
   // Get User's reviews
-  app.get('/users/:user_id/posts', function(req, res){
+  app.get('/users/:user_id/reviews', function(req, res){
   })
 
   // Get User's reviews
-  app.get('/users/:user_id/posts/:post_id', function(req, res){
+  app.get('/users/:user_id/reviews/:review_id', function(req, res){
   })
 
   // Get User's reviews
-  app.get('/users/:user_id/posts/:post_id', function(req, res){
+  app.get('/users/:user_id/reviews/:review_id', function(req, res){
   })
 
   // Get User's reviews
-  app.get('/users/:user_id/posts/:post_id', function(req, res){
+  app.get('/users/:user_id/reviews/:review_id', function(req, res){
   })
 
 }
