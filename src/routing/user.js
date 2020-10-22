@@ -15,7 +15,7 @@ const user = app => {
   app.put('/users/:user_id', function(req, res){
   })
 
-  // Update user
+  // Delete user
   app.delete('/users/:user_id', function(req, res){
   })
 
