@@ -27,15 +27,7 @@ const user = app => {
   app.get('/users/:user_id/reviews', function(req, res){
   })
 
-  // Get User's reviews
-  app.get('/users/:user_id/reviews/:review_id', function(req, res){
-  })
-
-  // Get User's reviews
-  app.get('/users/:user_id/reviews/:review_id', function(req, res){
-  })
-
-  // Get User's reviews
+  // Get a single review
   app.get('/users/:user_id/reviews/:review_id', function(req, res){
   })
 
