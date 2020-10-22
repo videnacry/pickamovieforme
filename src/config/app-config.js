@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config()
-const fs = require('fs')
 const path = require('path')
 
+//-------------------DB constants-----------------------------
 const DB = {
     name:process.env.DB_NAME,
     host:process.env.DB_HOST,
@@ -9,41 +9,39 @@ const DB = {
     password:process.env.DB_PASSWORD
 }
 
+//-------------------Express constants-------------------------
 const EXPRESS = {
     port:process.env.PORT
 }
 
-const sequelizeConfigPath = path.resolve(__dirname, 'config.json')
-if(!fs.existsSync(sequelizeConfigPath)){
-    const sequelizeConfig = {
-        development: {
-          username: DB.user,
-          password: DB.password,
-          database: DB.name,
-          host: DB.host,
-          dialect: process.env.DIALECT
-        },
-        test: {
-          username: DB.user,
-          password: DB.password,
-          database: DB.name,
-          host: DB.host,
-          dialect: process.env.DIALECT
-        },
-        production: {
-          username: DB.user,
-          password: DB.password,
-          database: DB.name,
-          host: DB.host,
-          dialect: process.env.DIALECT
-        }
-      }
-    fs.writeFile(sequelizeConfigPath, JSON.stringify(sequelizeConfig), (err) => {
-        if(err) console.log(err)
-    })
+//------------------Sequelize config----------------------------
+const development = {
+  username: DB.user,
+  password: DB.password,
+  database: DB.name,
+  host: DB.host,
+  dialect: process.env.DIALECT
+}
+const test = {
+  username: DB.user,
+  password: DB.password,
+  database: DB.name,
+  host: DB.host,
+  dialect: process.env.DIALECT
+}
+const production = {
+  username: DB.user,
+  password: DB.password,
+  database: DB.name,
+  host: DB.host,
+  dialect: process.env.DIALECT
 }
 
 module.exports = {
-    DB : DB,
-    EXPRESS : EXPRESS
+  DB : DB,
+  EXPRESS : EXPRESS,
+  development : development,
+  test : test,
+  production : production
 }
+  
