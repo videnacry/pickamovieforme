@@ -1,20 +1,20 @@
 /**
- * Define routes of Post's data
+ * Define routes of Review's data
  */
-const post = app => {
+const review = app => {
   // Store review
   app.post('/reviews', function(req, res){
   })
 
-  // Get a single user
+  // Get a single review
   app.get('/reviews/:review_id', function(req, res){
   })
 
-  // Update user
+  // Update review
   app.put('/reviews/:review_id', function(req, res){
   })
 
-  // Delete user
+  // Delete review
   app.delete('/reviews/:review_id', function(req, res){
   })
 
@@ -27,3 +27,5 @@ const post = app => {
   })
 
 }
+
+module.exports = review
