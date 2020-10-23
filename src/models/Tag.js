@@ -1,27 +1,34 @@
-const {Model, DataTypes} = require('sequelize')
-const sequelize = require('../database/db')
-
-class Tag extends Model{
-
-}
-
-Tag.init({
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Tag extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  };
+  Tag.init({
     tag_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false
     }
-},{
+  }, {
     sequelize,
-    dialect:'mysql',
-    modelName:'tag',
-    tableName:'tag',
-    createdAt: false,
-    updatedAt: false
-})
-
-Tag.create({name:'drama'}).then(()=>console.log('hol')).catch(err => console.log(err))
+    modelName: 'Tag',
+    tableName: 'tag',
+    timestamps: false,
+    dialect: 'mysql'
+  });
+  return Tag;
+};

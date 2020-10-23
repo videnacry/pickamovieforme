@@ -1,63 +1,59 @@
-const {DataTypes, Model} = require('sequelize')
-const sequelize = require('../database/db')
-
-class Review extends Model{
-    
-}
-
-Review.init({
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Review extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Review.hasMany(models.Comment)
+    }
+  };
+  Review.init({
     review_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-      content: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      movie_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      reviews_count: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      creation_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      update_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      delete_date: {
-        type: DataTypes.DATE,
-      }
-},{
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    movie_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    reviews_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    creation_date: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    update_date: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    delete_date: {
+      type: DataTypes.DATE,
+    }
+  }, {
     sequelize,
-    modelName: 'review',
-    createdAt: 'creation_date',
-    updatedAt: 'update_date',
+    modelName: 'Review',
     tableName: 'review',
+    updatedAt: 'update_date',
+    createdAt: 'creation_date',
     dialect: 'mysql'
-})
-
-// const comment = require('./Comment')
-
-// Review.hasMany(comment, {
-//     as:'comments',
-//     foreignKey:'review_id',
-// })
-
-// Review.create({
-//     content: 'rev',
-//     movie_id: 1,
-//     title: 'tit',
-//     reviews_count: 1
-// }).catch(err => console.log(err))
-module.exports = Review
+  });
+  return Review;
+};

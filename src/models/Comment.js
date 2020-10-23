@@ -1,30 +1,39 @@
-const {DataTypes, Model} = require('sequelize')
-const sequelize = require('../database/db')
-
-class Comment extends Model{
-    
-}
-
-Comment.init({
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Comment extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Comment.belongsTo(models.Review)
+    }
+  };
+  Comment.init({
     comment_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
     comment: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false
     },
     review_id: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: {
-                tableName: 'review',
-            },
-            key : 'review_id',
+      type: DataTypes.INTEGER,
+      references: {
+        model: {
+          tableName: 'review',
         },
-        onDelete: 'cascade',
-        onUpdate: 'cascade'
+        key: 'review_id',
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
     },
     // user_id: {
     //     type: DataTypes.INTEGER,
@@ -36,39 +45,21 @@ Comment.init({
     //     }
     // },
     creation_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     },
     update_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
-},{
+  }, {
     sequelize,
-    modelName: 'comment',
-    createdAt: 'creation_date',
-    updatedAt: 'update_date',
+    modelName: 'Comment',
     tableName: 'comment',
-    dialect: 'mysql',
-})
-
-const review = require('./Review')
-
-Comment.belongsTo(review, {
-    as:'review',
-    foreignKey:'review_id'
-})
-review.hasMany(Comment, {
-    as:'comments',
-    foreignKey:'review_id',
-})
-review.findAll({include:{model:Comment, as: 'comments'}}).then(reviews => console.log(reviews))
-// Comment.create({
-//     comment: 'comment',
-//     review_id: 1,
-//     // user_id: 1
-// }).catch(err => console.log(err))
-
-// console.log(require('./Review'))
-
-module.exports = Comment
+    updatedAt: 'update_date',
+    createdAt: 'creation_date',
+    dialect: 'mysql'
+  });
+  
+  return Comment;
+};
