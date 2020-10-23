@@ -47,9 +47,17 @@ Review.init({
     dialect: 'mysql'
 })
 
+// const comment = require('./Comment')
+
+// Review.hasMany(comment, {
+//     as:'comments',
+//     foreignKey:'review_id',
+// })
+
 // Review.create({
 //     content: 'rev',
 //     movie_id: 1,
 //     title: 'tit',
 //     reviews_count: 1
 // }).catch(err => console.log(err))
+module.exports = Review
