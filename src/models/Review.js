@@ -4,8 +4,6 @@ const {
   Model
 } = require('sequelize');
 const sequelize = require('../database/db')
-const Comment   = require('./Comment')
-const User      = require('./User')
 
 class Review extends Model {}
 
@@ -21,7 +19,7 @@ module.exports = Review.init({
   reviews_count:  DataTypes.INTEGER,
   user_id:        DataTypes.INTEGER,
   creation_date:  DataTypes.DATE,
-  update_date:    DataTypes.DATE
+  updated_date:    DataTypes.DATE
 }, 
 {
   sequelize,
@@ -34,5 +32,7 @@ module.exports = Review.init({
   dialect:        'mysql'
 })
 
+const Comment   = require('./Comment')
+const User      = require('./User')
 Review.hasMany(Comment, {foreignKey: 'comment_id'})
 Review.belongsTo(User, {foreignKey: 'user_id'})
