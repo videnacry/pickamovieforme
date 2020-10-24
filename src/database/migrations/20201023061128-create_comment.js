@@ -1,7 +1,5 @@
 'use strict';
 
-const sequelize = require("../db");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     /**
@@ -10,7 +8,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    return queryInterface.createTable('comment', {
+    return queryInterface.createTable('comments', {
       comment_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -24,27 +22,27 @@ module.exports = {
           type: Sequelize.INTEGER,
           references: {
             model: {
-                tableName: 'review',
+                tableName: 'reviews',
             },
             key : 'review_id',
           },
           onDelete: 'cascade',
           onUpdate: 'cascade'
       },
-      // user_id: {
-      //     type: Sequelize.INTEGER,
-      //     references: {
-      //         model: {
-      //             tableName: 'user',
-      //         },
-      //         key : 'user_id'
-      //     }
-      // },
+      user_id: {
+          type: Sequelize.INTEGER,
+          references: {
+              model: {
+                  tableName: 'users',
+              },
+              key : 'user_id'
+          }
+      },
       creation_date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
-      update_date: {
+      updated_date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       }
@@ -58,6 +56,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    return queryInterface.dropTable('comment')
+    return queryInterface.dropTable('comments')
   }
 };
