@@ -3,7 +3,6 @@ const {
   Model
 } = require('sequelize')
 const sequelize = require('../database/db')
-const Review    = require('./Review')
 
 class User extends Model {}
 
@@ -33,4 +32,5 @@ module.exports = User.init({
   dialect:    'mysql'
 })
 
+const Review    = require('./Review')
 User.hasMany(Review, {foreignKey: 'user_id'})
