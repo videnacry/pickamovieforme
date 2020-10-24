@@ -1,61 +1,38 @@
 'use strict';
 const {
+  DataTypes,
   Model
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Review extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      Review.hasMany(models.Comment, {
-        foreignKey: 'review_id'
-      })
-    }
-  };
-  Review.init({
-    review_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    content: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    movie_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    reviews_count: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    creation_date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    },
-    update_date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    },
-    delete_date: {
-      type: DataTypes.DATE,
-    }
-  }, {
-    sequelize,
-    modelName: 'Review',
-    tableName: 'review',
-    updatedAt: 'update_date',
-    createdAt: 'creation_date',
-    dialect: 'mysql'
-  });
-  return Review;
-};
+const sequelize = require('../database/db')
+const Comment   = require('./Comment')
+const User      = require('./User')
+
+class Review extends Model {}
+
+module.exports = Review.init({
+  review_id: {
+    type:           DataTypes.INTEGER,
+    primaryKey:     true,
+    autoIncrement:  true
+  },
+  content:        DataTypes.STRING,
+  movie_id:       DataTypes.INTEGER,
+  title:          DataTypes.STRING,
+  reviews_count:  DataTypes.INTEGER,
+  user_id:        DataTypes.INTEGER,
+  creation_date:  DataTypes.DATE,
+  update_date:    DataTypes.DATE
+}, 
+{
+  sequelize,
+  modelName:      'review',
+  tableName:      'reviews',
+  reviews_count:  'reviews_count',
+  user_id:        'user_id',
+  updatedAt:      'updated_date',
+  createdAt:      'creation_date',
+  dialect:        'mysql'
+})
+
+Review.hasMany(Comment, {foreignKey: 'comment_id'})
+Review.belongsTo(User, {foreignKey: 'user_id'})
