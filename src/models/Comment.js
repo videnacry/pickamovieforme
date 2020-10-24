@@ -1,67 +1,28 @@
 'use strict';
 const {
+  DataTypes,
   Model
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Comment extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      Comment.belongsTo(models.Review, {
-        foreignKey: 'review_id',
-      })
-    }
-  };
-  Comment.init({
-    comment_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    review_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: {
-          tableName: 'review',
-        },
-        key: 'review_id',
-      },
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
-    },
-    // user_id: {
-    //     type: DataTypes.INTEGER,
-    //     references: {
-    //         model: {
-    //             tableName: 'user',
-    //         },
-    //         key : 'user_id'
-    //     }
-    // },
-    creation_date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    },
-    update_date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    }
-  }, {
-    sequelize,
-    modelName: 'Comment',
-    tableName: 'comment',
-    updatedAt: 'update_date',
-    createdAt: 'creation_date',
-    dialect: 'mysql'
-  });
-  
-  return Comment;
-};
+const sequelize = require('../database/db')
+
+  class Comment extends Model {}
+
+module.exports = Comment.init({
+  comment_id: {
+    type:           DataTypes.INTEGER,
+    primaryKey:     true,
+    autoIncrement:  true
+  },
+  comment:        DataTypes.STRING,
+  review_id:      DataTypes.INTEGER,
+  user_id:        DataTypes.INTEGER,
+  creation_date:  DataTypes.DATE,
+  update_date:    DataTypes.DATE
+}, {
+  sequelize,
+  modelName:  'comment',
+  tableName:  'comments',
+  updatedAt:  'updated_date',
+  createdAt:  'creation_date',
+  dialect:    'mysql'
+})
