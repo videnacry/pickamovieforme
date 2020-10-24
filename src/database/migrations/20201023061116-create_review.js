@@ -8,7 +8,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    return queryInterface.createTable('review', {
+    return queryInterface.createTable('reviews', {
       review_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -20,26 +20,35 @@ module.exports = {
       },
       movie_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       reviews_count: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: {
+                tableName: 'users',
+            },
+            key : 'user_id',
+        }
+    },
       creation_date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
-      update_date: {
+      updated_date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
-      },
-      delete_date: {
-        type: Sequelize.DATE,
       }
     })
   },
@@ -51,6 +60,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    return queryInterface.dropTable('review')
+    return queryInterface.dropTable('reviews')
   }
 };
