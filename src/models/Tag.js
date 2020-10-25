@@ -13,8 +13,7 @@ module.exports = Tag.init({
     autoIncrement:  true
   },
   name: {
-    type:         DataTypes.STRING,
-    allowNull:    false
+    type: DataTypes.STRING
   }
 }, {
   sequelize,
