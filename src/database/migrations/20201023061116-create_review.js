@@ -36,12 +36,12 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-            model: {
-                tableName: 'users',
-            },
-            key : 'user_id',
+          model: {
+            tableName: 'users',
+          },
+          key: 'user_id',
         }
-    },
+      },
       creation_date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
