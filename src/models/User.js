@@ -32,5 +32,10 @@ module.exports = User.init({
   dialect:    'mysql'
 })
 
-const Review    = require('./Review')
+const Review              = require('./Review')
+const UserTagHidden       = require('./User-Tag-Hidden')
+const UserReviewFavorite  = require('./User-Review-Favorite')
+
 User.hasMany(Review, {foreignKey: 'user_id'})
+User.hasMany(UserTagHidden, {foreignKey: 'user_id'})
+User.hasMany(UserReviewFavorite, {foreignKey: 'user_id'})
