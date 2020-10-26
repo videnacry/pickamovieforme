@@ -13,7 +13,14 @@ module.exports = Comment.init({
     primaryKey:     true,
     autoIncrement:  true
   },
-  comment:        DataTypes.STRING,
+  comment: {
+    type: DataTypes.STRING,
+    validate: {
+      notEmpty: {
+        msg: 'Write your comment.'
+      }
+    }
+  },
   review_id:      DataTypes.INTEGER,
   user_id:        DataTypes.INTEGER,
   creation_date:  DataTypes.DATE,
