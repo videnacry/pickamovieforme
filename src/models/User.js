@@ -4,19 +4,19 @@ const {
 } = require('sequelize')
 const sequelize = require('../database/db')
 
-class User extends Model {}
+class User extends Model { }
 
 
 module.exports = User.init({
   user_id: {
-    type:           DataTypes.INTEGER,
-    allowNull:      false,
-    primaryKey:     true,
-    autoIncrement:  true
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true
   },
-  photo:        DataTypes.STRING,
-  description:  DataTypes.STRING,
-  name: 
+  photo: DataTypes.STRING,
+  description: DataTypes.STRING,
+  name:
   {
     type: DataTypes.STRING,
     validate: {
@@ -42,18 +42,15 @@ module.exports = User.init({
         args: /^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/i,
         msg: 'Username invalid. (Use letters, numbers, "_" and "." - Do not use . o _ at the beginning or end or "..", "__")'
       },
-      fn: async function(val){
-        try {
-          const user = await User.findOne({
-            where: {
-              username: val
-            }
-          })
-          if (user)
-            return Promise.reject('Username already in user')
-        } catch (err) {
-          return false
-        }
+      fn: async function (val) {
+        const user = await User.findOne({
+          where: {
+            username: val
+          }
+        })
+        if (user)
+          throw new Error('Username already in user')
+
       }
     }
   },
@@ -67,18 +64,14 @@ module.exports = User.init({
       isEmail: {
         msg: "Enter a valid email."
       },
-      fn: async function(val){
-        try {
-          const user = await User.findOne({
-            where: {
-              email: val
-            }
-          })
-          if (user)
-            return Promise.reject('Username already in user')
-        } catch (err) {
-          return false
-        }
+      fn: async function (val) {
+        const user = await User.findOne({
+          where: {
+            email: val
+          }
+        })
+        if (user)
+          throw new Error('Email already in user')
       }
     },
     unique: {
@@ -86,7 +79,7 @@ module.exports = User.init({
       msg: 'Email already in user'
     }
   },
-  password: 
+  password:
   {
     type: DataTypes.STRING,
     // validate: {
@@ -95,21 +88,21 @@ module.exports = User.init({
     // }
   }
 },
-{
-  sequelize,
-  modelName:  'user',
-  tableName:  'users',
-  user_id:    'user_id',
-  createdAt:  'creation_date',
-  updatedAt:  'updated_date',
-  deletedAt:  'deleted_date',
-  dialect:    'mysql'
-})
+  {
+    sequelize,
+    modelName: 'user',
+    tableName: 'users',
+    user_id: 'user_id',
+    createdAt: 'creation_date',
+    updatedAt: 'updated_date',
+    deletedAt: 'deleted_date',
+    dialect: 'mysql'
+  })
 
-const Review              = require('./Review')
-const UserTagHidden       = require('./User-Tag-Hidden')
-const UserReviewFavorite  = require('./User-Review-Favorite')
+const Review = require('./Review')
+const UserTagHidden = require('./User-Tag-Hidden')
+const UserReviewFavorite = require('./User-Review-Favorite')
 
-User.hasMany(Review, {foreignKey: 'user_id'})
-User.hasMany(UserTagHidden, {foreignKey: 'user_id'})
-User.hasMany(UserReviewFavorite, {foreignKey: 'user_id'})
+User.hasMany(Review, { foreignKey: 'user_id' })
+User.hasMany(UserTagHidden, { foreignKey: 'user_id' })
+User.hasMany(UserReviewFavorite, { foreignKey: 'user_id' })
