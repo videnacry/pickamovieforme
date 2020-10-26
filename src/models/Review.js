@@ -13,7 +13,14 @@ module.exports = Review.init({
     primaryKey:     true,
     autoIncrement:  true
   },
-  content:        DataTypes.STRING,
+  content:{
+    type: DataTypes.STRING,
+    validate: {
+      notEmpty : {
+        msg: 'Write your review !'
+      }
+    }
+  },
   movie_id:       DataTypes.INTEGER,
   title:          DataTypes.STRING,
   reviews_count:  DataTypes.INTEGER,
