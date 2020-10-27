@@ -2,7 +2,7 @@ const {User}              = require('../models/Models')
 const validationMessage   = require('./validationMessage')
 
 
-getUsers = async (req, res) =>{
+const getUsers = (req, res) =>{
   let email = false
   if(Object.keys(req.query).length){
     if(req.query.email)
@@ -24,9 +24,9 @@ getUsers = async (req, res) =>{
     .then(users =>{
       users.length
       ? res.status(200).json(users)
-      : res.status(422).json({
+      : res.status(404).json({
           success: false,
-          message: "User not fount"
+          message: "User/s not found"
       })
     })
     .catch(()=>{
@@ -37,11 +37,10 @@ getUsers = async (req, res) =>{
     })
 }
 
-
 /**
  * Check if already exist an user with this email
  */
-emailInUse = async (email) => {
+const emailInUse = async (email) => {
   const user = await User.findOne({
     where: {
       email: email
@@ -60,7 +59,7 @@ emailInUse = async (email) => {
 /**
  * Check if already exist an user with this username
  */
-usernameInUse = async (username) => {
+const usernameInUse = async (username) => {
   const user = await User.findOne({
     where: {
       username: username
@@ -79,7 +78,7 @@ usernameInUse = async (username) => {
 /**
  * Store User.
  */
-storeUser = async (req, res) => {
+const storeUser = async (req, res) => {
   const user = User.build(req.body)
   let err = await validationMessage(user)
   if(!err)
@@ -109,7 +108,7 @@ storeUser = async (req, res) => {
  * Get User by ID
  * @return {json} Used or error message
  */
-getUserById = (req, res) => {
+const getUserById = (req, res) => {
   User.findOne({
     where: {
       user_id: req.params.user_id
@@ -134,18 +133,20 @@ getUserById = (req, res) => {
 /**
  * Update User
  */
-updateUser = async (req, res) => {
-  await User.update(
+const updateUser = (req, res) => {
+  User.update(
     req.body, {
       where: {
         user_id: req.params.user_id
       }
     })
-  .then(() => {
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully"
-    })
+  .then((row) => {
+    row[0]
+      ? res.status(200).json({
+        success: true,
+        message: "User updated successfully"
+      })
+      : res.status(204)
   })
   .catch(() => {
     res.status(500).json({
@@ -155,9 +156,29 @@ updateUser = async (req, res) => {
   })
 }
 
+const deleteUser = (req, res) => {
+  User.destroy({
+    where: {
+      user_id: req.params.user_id
+    }
+  })
+    .then((user)=>{
+      user
+        ? res.status(200).json({
+          success: true,
+          message: "User deleted correctly"
+        })
+        : res.status(404).json({
+          success: true,
+          message: "User not found"
+        })
+    })
+}
+
 module.exports = {
   getUsers: getUsers,
   getUserById: getUserById,
   storeUser: storeUser,
-  updateUser: updateUser
+  updateUser: updateUser,
+  deleteUser: deleteUser
 }

@@ -15,8 +15,7 @@ const user = app => {
   app.put('/users/:user_id', UserController.updateUser)
 
   // Delete user
-  app.delete('/users/:user_id', function(req, res){
-  })
+  app.delete('/users/:user_id', UserController.deleteUser)
 
   //GET USERS
   app.get('/users', UserController.getUsers)
