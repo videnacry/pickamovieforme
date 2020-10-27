@@ -24,8 +24,7 @@ const user = app => {
   app.get('/users/:user_id/reviews', UserController.getUserReviews)
 
   // Get a single review
-  app.get('/users/:user_id/reviews/:review_id', function(req, res){
-  })
+  app.get('/users/:user_id/reviews/:review_id', UserController.getUserReview)
 
 }
 

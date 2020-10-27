@@ -1,4 +1,4 @@
-const {User, Review}              = require('../models/Models')
+const {User, Review}      = require('../models/Models')
 const validationMessage   = require('./validationMessage')
 
 
@@ -119,7 +119,7 @@ const getUserById = (req, res) => {
         ? res.status(200).json(user) 
         : res.status(404).json({
             success: false,
-            message: "User not fount"
+            message: "User not found"
           })
     })
     .catch(() => {
@@ -179,13 +179,16 @@ const deleteUser = (req, res) => {
     })
 }
 
+/**
+ * Get User with their reviews
+ */
 const getUserReviews = (req, res)=>{
   User.findOne({
     where: {
       user_id: req.params.user_id
     },
     include: {
-      model: Review
+      model: Review,
     }
   })
     .then(user =>{
@@ -193,7 +196,38 @@ const getUserReviews = (req, res)=>{
         ? res.status(200).json(user)
         : res.status(404).json({
           success: false,
-          message: "User not fount"
+          message: "User not found"
+        })
+    })
+    .catch(()=>{
+      res.status(500).json({
+        success: false,
+        message: "The request could not be processed"
+      })
+    })
+}
+
+/**
+ * Get User with a sprecific review (by ID)
+ */
+const getUserReview = (req, res)=>{
+  User.findOne({
+    where: {
+      user_id: req.params.user_id
+    },
+    include: {
+      model: Review,
+      where: {
+        review_id: req.params.review_id
+      }
+    }
+  })
+    .then(user =>{
+      user
+        ? res.status(200).json(user)
+        : res.status(404).json({
+          success: false,
+          message: "User or Review not found"
         })
     })
     .catch(()=>{
@@ -205,10 +239,11 @@ const getUserReviews = (req, res)=>{
 }
 
 module.exports = {
-  getUsers: getUsers,
-  getUserById: getUserById,
-  storeUser: storeUser,
-  updateUser: updateUser,
-  deleteUser: deleteUser,
-  getUserReviews: getUserReviews
+  getUsers:       getUsers,
+  getUserById:    getUserById,
+  storeUser:      storeUser,
+  updateUser:     updateUser,
+  deleteUser:     deleteUser,
+  getUserReviews: getUserReviews,
+  getUserReview:  getUserReview
 }
