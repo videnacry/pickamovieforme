@@ -1,4 +1,4 @@
-const {User}              = require('../models/Models')
+const {User, Review}              = require('../models/Models')
 const validationMessage   = require('./validationMessage')
 
 
@@ -117,7 +117,7 @@ const getUserById = (req, res) => {
     .then((user) => {
       user
         ? res.status(200).json(user) 
-        : res.status(422).json({
+        : res.status(404).json({
             success: false,
             message: "User not fount"
           })
@@ -156,6 +156,10 @@ const updateUser = (req, res) => {
   })
 }
 
+/**
+ * Delete User
+ * Soft delete. Add Date in deleted_date column
+ */
 const deleteUser = (req, res) => {
   User.destroy({
     where: {
@@ -175,10 +179,36 @@ const deleteUser = (req, res) => {
     })
 }
 
+const getUserReviews = (req, res)=>{
+  User.findOne({
+    where: {
+      user_id: req.params.user_id
+    },
+    include: {
+      model: Review
+    }
+  })
+    .then(user =>{
+      user
+        ? res.status(200).json(user)
+        : res.status(404).json({
+          success: false,
+          message: "User not fount"
+        })
+    })
+    .catch(()=>{
+      res.status(500).json({
+        success: false,
+        message: "The request could not be processed"
+      })
+    })
+}
+
 module.exports = {
   getUsers: getUsers,
   getUserById: getUserById,
   storeUser: storeUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  getUserReviews: getUserReviews
 }
