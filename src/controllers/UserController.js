@@ -155,3 +155,9 @@ updateUser = async (req, res) => {
   })
 }
 
+module.exports = {
+  getUsers: getUsers,
+  getUserById: getUserById,
+  storeUser: storeUser,
+  updateUser: updateUser
+}
