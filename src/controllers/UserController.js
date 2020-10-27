@@ -104,3 +104,29 @@ storeUser = async (req, res) => {
       })
   }
 }
+
+/**
+ * Get User by ID
+ * @return {json} Used or error message
+ */
+getUserById = (req, res) => {
+  User.findOne({
+    where: {
+      user_id: req.params.user_id
+    }
+  })
+    .then((user) => {
+      user
+        ? res.status(200).json(user) 
+        : res.status(422).json({
+            success: false,
+            message: "User not fount"
+          })
+    })
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        message: "The request could not be processed"
+      })
+    })
+}
