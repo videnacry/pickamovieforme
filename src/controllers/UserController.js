@@ -130,3 +130,28 @@ getUserById = (req, res) => {
       })
     })
 }
+
+/**
+ * Update User
+ */
+updateUser = async (req, res) => {
+  await User.update(
+    req.body, {
+      where: {
+        user_id: req.params.user_id
+      }
+    })
+  .then(() => {
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully"
+    })
+  })
+  .catch(() => {
+    res.status(500).json({
+      success: false,
+      message: "The request could not be processed"
+    })
+  })
+}
+
