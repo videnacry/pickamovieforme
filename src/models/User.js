@@ -71,6 +71,7 @@ module.exports = User.init({
 },
   {
     sequelize,
+    paranoid: true,
     modelName: 'user',
     tableName: 'users',
     user_id: 'user_id',
