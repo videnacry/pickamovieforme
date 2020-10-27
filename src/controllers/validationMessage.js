@@ -1,8 +1,10 @@
-
+/**
+ * Isolate error properties to send response
+ * @param {Object} object Errors from Sequelize
+ */
 async function validationMessage(object){
-
   return await object.validate()
-    .then(valid => false)
+    .then(() => false)
     .catch(err => {
       let errors = []
       for (var prop in err.errors) {

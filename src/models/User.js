@@ -41,16 +41,6 @@ module.exports = User.init({
       is: {
         args: /^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/i,
         msg: 'Username invalid. (Use letters, numbers, "_" and "." - Do not use . o _ at the beginning or end or "..", "__")'
-      },
-      fn: async function (val) {
-        const user = await User.findOne({
-          where: {
-            username: val
-          }
-        })
-        if (user)
-          throw new Error('Username already in user')
-
       }
     }
   },
@@ -63,15 +53,6 @@ module.exports = User.init({
       },
       isEmail: {
         msg: "Enter a valid email."
-      },
-      fn: async function (val) {
-        const user = await User.findOne({
-          where: {
-            email: val
-          }
-        })
-        if (user)
-          throw new Error('Email already in user')
       }
     },
     unique: {
