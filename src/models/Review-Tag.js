@@ -24,4 +24,6 @@ module.exports = ReviewTag.init({
 });
 
 const Tag = require('./Tag')
-ReviewTag.hasMany(Tag, {foreignKey: 'tag_id'})
+ReviewTag.hasMany(Tag, {foreignKey: 'tag_id', sourceKey: 'tag_id'})
+const Review = require('./Review')
+ReviewTag.hasMany(Review, {foreignKey: 'review_id', sourceKey:'review_id'})
