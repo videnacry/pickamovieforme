@@ -101,3 +101,26 @@ const updateComment = (req, res) => {
   })
 }
 
+const deleteComment = (req, res) => {
+  Comment.destroy({
+    where: {
+      comment_id: req.params.comment_id
+    }
+  })
+    .then((comment)=>{
+      comment
+        ? res.status(200).json({
+          success: true,
+          data: null,
+          message: "Comment deleted correctly",
+          error: null
+        })
+        : res.status(404).json({
+          success: false,
+          data: null,
+          error: {
+            message: "Comment not found"
+          }
+        })
+    })
+}
