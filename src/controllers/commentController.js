@@ -33,3 +33,36 @@ const storeComment = async (req, res) => {
       })
   }
 }
+
+
+const getCommentById = (req, res) => {
+  Comment.findOne({
+    where: {
+      comment_id: req.params.comment_id
+    }
+  })
+    .then((comment) => {
+      comment
+        ? res.status(200).json({
+          success: true,
+          data: comment,
+          error: null
+        }) 
+        : res.status(404).json({
+            success: false,
+            data: null,
+            error: {
+              message: "Comment not found"
+            }
+          })
+    })
+    .catch(() => {
+      res.status(500).json({
+        success: false,
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
+      })
+    })
+}
