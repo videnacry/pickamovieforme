@@ -23,3 +23,5 @@ module.exports = ReviewTag.init({
   tableName: 'review_tag',
 });
 
+const Tag = require('./Tag')
+ReviewTag.hasMany(Tag, {foreignKey: 'tag_id'})
