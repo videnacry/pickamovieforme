@@ -14,6 +14,11 @@ const EXPRESS = {
     port:process.env.PORT
 }
 
+//-------------------------API key-----------------------------
+const API = {
+    key:process.env.API_KEY
+}
+
 //------------------Sequelize config----------------------------
 const development = {
   username: DB.user,
@@ -40,6 +45,7 @@ const production = {
 module.exports = {
   DB : DB,
   EXPRESS : EXPRESS,
+  API : API,
   development : development,
   test : test,
   production : production
