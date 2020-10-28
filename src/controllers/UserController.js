@@ -1,16 +1,19 @@
-const {User}              = require('../models/Models')
+const {User, Review}      = require('../models/Models')
 const validationMessage   = require('./validationMessage')
 
 
-getUsers = async (req, res) =>{
-  let email = false
+const getUsers = (req, res) =>{
+  let username = false
   if(Object.keys(req.query).length){
-    if(req.query.email)
-      email = req.query.email 
+    if(req.query.username)
+      username = req.query.username 
     else{
       res.status(400).json({
         success: false,
-        message: 'Bad request'
+        data: null,
+        error: {
+          message: 'Bad request'
+        }
       })
       return
     }
@@ -18,30 +21,39 @@ getUsers = async (req, res) =>{
 
   User.findAll({
     where: {
-      email: email
+      username: username
     }
   })
     .then(users =>{
       users.length
-      ? res.status(200).json(users)
-      : res.status(422).json({
+      ? res.status(200).json({
+        success: true,
+        data: users,
+        error: null
+      })
+      : res.status(404).json({
           success: false,
-          message: "User not fount"
+          data: null,
+          error: {
+            message: "User/s not found"
+          }
       })
     })
     .catch(()=>{
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
 
-
 /**
  * Check if already exist an user with this email
  */
-emailInUse = async (email) => {
+const emailInUse = async (email) => {
   const user = await User.findOne({
     where: {
       email: email
@@ -60,7 +72,7 @@ emailInUse = async (email) => {
 /**
  * Check if already exist an user with this username
  */
-usernameInUse = async (username) => {
+const usernameInUse = async (username) => {
   const user = await User.findOne({
     where: {
       username: username
@@ -79,7 +91,7 @@ usernameInUse = async (username) => {
 /**
  * Store User.
  */
-storeUser = async (req, res) => {
+const storeUser = async (req, res) => {
   const user = User.build(req.body)
   let err = await validationMessage(user)
   if(!err)
@@ -97,9 +109,11 @@ storeUser = async (req, res) => {
     res.status(422).json(err)
   } else {
     user.save()
-      .then(() => {
+      .then((data) => {
         res.status(200).json({
-          success: true
+          success: true,
+          data: data,
+          error: null
         })
       })
   }
@@ -109,7 +123,7 @@ storeUser = async (req, res) => {
  * Get User by ID
  * @return {json} Used or error message
  */
-getUserById = (req, res) => {
+const getUserById = (req, res) => {
   User.findOne({
     where: {
       user_id: req.params.user_id
@@ -117,16 +131,26 @@ getUserById = (req, res) => {
   })
     .then((user) => {
       user
-        ? res.status(200).json(user) 
-        : res.status(422).json({
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        }) 
+        : res.status(404).json({
             success: false,
-            message: "User not fount"
+            data: null,
+            error: {
+              message: "User not found"
+            }
           })
     })
     .catch(() => {
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
@@ -134,30 +158,153 @@ getUserById = (req, res) => {
 /**
  * Update User
  */
-updateUser = async (req, res) => {
-  await User.update(
+const updateUser = (req, res) => {
+  User.update(
     req.body, {
       where: {
         user_id: req.params.user_id
       }
     })
-  .then(() => {
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully"
-    })
+  .then((row) => {
+    console.log("aa");
+    row[0]
+      ? res.status(200).json({
+        success: true,
+        data: req.body,
+        message: "User updated successfully"
+      })
+      : res.status(404).json({
+        success: false,
+        data: null,
+        error: {
+          message: "User not found"
+        }
+      })
   })
   .catch(() => {
     res.status(500).json({
       success: false,
-      message: "The request could not be processed"
+      data: null,
+      error: {
+        message: "The request could not be processed"
+      }
     })
   })
 }
 
+/**
+ * Delete User
+ * Soft delete. Add Date in deleted_date column
+ */
+const deleteUser = (req, res) => {
+  User.destroy({
+    where: {
+      user_id: req.params.user_id
+    }
+  })
+    .then((user)=>{
+      user
+        ? res.status(200).json({
+          success: true,
+          data: null,
+          message: "User deleted correctly",
+          error: null
+        })
+        : res.status(404).json({
+          success: false,
+          data: null,
+          error: {
+            message: "User not found"
+          }
+        })
+    })
+}
+
+/**
+ * Get User with their reviews
+ */
+const getUserReviews = (req, res)=>{
+  User.findOne({
+    where: {
+      user_id: req.params.user_id
+    },
+    include: {
+      model: Review,
+    }
+  })
+    .then(user =>{
+      user
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        })
+        : res.status(404).json({
+          success: false,
+          data: null,
+          error: {
+            message: "User not found"
+          }
+        })
+    })
+    .catch(()=>{
+      res.status(500).json({
+        success: false,
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
+      })
+    })
+}
+
+/**
+ * Get User with a sprecific review (by ID)
+ */
+const getUserReview = (req, res)=>{
+  User.findOne({
+    where: {
+      user_id: req.params.user_id
+    },
+    include: {
+      model: Review,
+      where: {
+        review_id: req.params.review_id
+      }
+    }
+  })
+    .then(user =>{
+      user
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        })
+        : res.status(404).json({
+          success: false,
+          data: null,
+          error: {
+            message: "User or Review not found"
+          }
+        })
+    })
+    .catch(()=>{
+      res.status(500).json({
+        success: false,
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
+      })
+    })
+}
+
 module.exports = {
-  getUsers: getUsers,
-  getUserById: getUserById,
-  storeUser: storeUser,
-  updateUser: updateUser
+  getUsers:       getUsers,
+  getUserById:    getUserById,
+  storeUser:      storeUser,
+  updateUser:     updateUser,
+  deleteUser:     deleteUser,
+  getUserReviews: getUserReviews,
+  getUserReview:  getUserReview
 }

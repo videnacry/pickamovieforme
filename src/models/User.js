@@ -71,19 +71,26 @@ module.exports = User.init({
 },
   {
     sequelize,
-    modelName: 'user',
-    tableName: 'users',
-    user_id: 'user_id',
-    createdAt: 'creation_date',
-    updatedAt: 'updated_date',
-    deletedAt: 'deleted_date',
-    dialect: 'mysql'
+    paranoid:   true,
+    modelName:  'user',
+    tableName:  'users',
+    user_id:    'user_id',
+    createdAt:  'creation_date',
+    updatedAt:  'updated_date',
+    deletedAt:  'deleted_date',
+    dialect:    'mysql'
   })
 
-const Review = require('./Review')
-const UserTagHidden = require('./User-Tag-Hidden')
+const Review             = require('./Review')
+const UserTagHidden      = require('./User-Tag-Hidden')
 const UserReviewFavorite = require('./User-Review-Favorite')
 
-User.hasMany(Review, { foreignKey: 'user_id' })
-User.hasMany(UserTagHidden, { foreignKey: 'user_id' })
-User.hasMany(UserReviewFavorite, { foreignKey: 'user_id' })
+User.hasMany(Review, { 
+  foreignKey: 'user_id' 
+})
+User.hasMany(UserTagHidden, { 
+  foreignKey: 'user_id' 
+})
+User.hasMany(UserReviewFavorite, { 
+  foreignKey: 'user_id' 
+})
