@@ -5,7 +5,7 @@ const {
 } = require('sequelize');
 const sequelize = require('../database/db')
 
-  class Comment extends Model {}
+class Comment extends Model {}
 
 module.exports = Comment.init({
   comment_id: {
@@ -24,7 +24,7 @@ module.exports = Comment.init({
   review_id:      DataTypes.INTEGER,
   user_id:        DataTypes.INTEGER,
   creation_date:  DataTypes.DATE,
-  update_date:    DataTypes.DATE
+  updated_date:   DataTypes.DATE
 }, {
   sequelize,
   modelName:  'comment',
