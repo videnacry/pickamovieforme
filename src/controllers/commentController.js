@@ -66,3 +66,38 @@ const getCommentById = (req, res) => {
       })
     })
 }
+
+
+const updateComment = (req, res) => {
+  Comment.update(
+    req.body, {
+      where: {
+        comment_id: req.params.comment_id
+      }
+    })
+  .then((row) => {
+    row[0]
+      ? res.status(200).json({
+        success: true,
+        data: req.body,
+        error: null
+      })
+      : res.status(404).json({
+        success: false,
+        data: null,
+        error: {
+          message: "Comment not found"
+        }
+      })
+  })
+  .catch(() => {
+    res.status(500).json({
+      success: false,
+      data: null,
+      error: {
+        message: "The request could not be processed"
+      }
+    })
+  })
+}
+
