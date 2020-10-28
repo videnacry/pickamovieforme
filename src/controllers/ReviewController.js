@@ -108,7 +108,7 @@ module.exports = {
     const { API } = require('../config/app-config')
 
     https.request('https://api.themoviedb.org/3/search/movie?api_key=' + API.key
-      + '&language=en-US&query=' + req.body.text + '&page=1&include_adult=false',
+      + '&language=en-US&query=' + req.params.title_text + '&page=1&include_adult=false',
       (request => {
         let movies = ''
         request.on('data', (data) => movies += data)
