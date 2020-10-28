@@ -2,7 +2,9 @@ const { model } = require('../database/db')
 const { Review } = require('../models/Models')
 const validationMessage = require('./validationMessage')
 module.exports = {
-
+  /**
+   * Get review by title along with comments, users, tags, and some movie data
+   */
   getReviews: async (req, res) => {
     let title = false
     if (Object.keys(req.query).length) {
@@ -17,15 +19,12 @@ module.exports = {
       }
     }
 
-    async function getTagCommentUser(review){
+    async function getTagCommentUser(review) {
       return Promise.all([
         require('../models/Review-Tag').findAll({
-          // include: {
-          //   model: require('../models/Tag'),
-          //   where: {
-          //     tag_id: Review.sequelize.col('tags.tag_id')
-          //   }
-          // },
+          include: {
+            model: require('../models/Tag')
+          },
           where: {
             review_id: review.review_id
           }
@@ -45,23 +44,43 @@ module.exports = {
         title: title
       }
     }).then(reviews => {
-        if(reviews.length){
-          const review = reviews[0]
-          getTagCommentUser(review).then(values => {
-            review.tags = values[0] || []
-            console.log(values[0])
-            review.comments = values[1] || [] 
-          }).catch(err => console.log(err))
-          //  res.status(200).json(reviews)
-        }else{
-           res.status(422).json({
-            success: false,
-            message: "Review not fount"
-          })
-        }
-          
-      })
-      .catch(() => {
+      if (reviews.length) {
+        const review = reviews[0]
+        getTagCommentUser(review).then(values => {
+          review.tags = values[0][0]['tags'] || []
+          review.comments = values[1] || []
+
+          // delete review.user._previousDataValues 
+          // delete review.user._options
+          // delete review._previousDataValues 
+          // delete review._options
+
+          sendReview(review)
+        }).catch(err => console.log(err))
+        //  res.status(200).json(reviews)
+      } else {
+        console.log('hol')
+        const https = require('https')
+        const { API } = require('../config/app-config')
+
+        https.request('https://api.themoviedb.org/3/search/movie?api_key=' + API.key
+          + '&language=en-US&query=' + req.query.title + '&page=1&include_adult=false',
+          (request => {
+            let movies = ''
+            request.on('data', (data) => movies += data)
+            request.on('end', () => {
+              const { results } = JSON.parse(movies)
+              res.status(200).json(results[0])
+            })
+          }))
+          .on('error', err => {
+            res.status(500).json({ success: false, message: "Request could not be processed" })
+          }).end()
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
         res.status(500).json({
           success: false,
           message: "The request could not be processed"
@@ -78,15 +97,26 @@ module.exports = {
           request
             .on('data', (data) => movie += data)
             .on('end', () => {
+              movie = JSON.parse(movie)
               review.img = movie.poster_path,
                 review.overview = movie.overview,
-                review.releaseDate = moview.release_date
+                review.releaseDate = movie.release_date
+              // console.log(review)
+              res.status(200).json(review)
             })
         })
-      )
+      ).on('err', err => {
+        res.status(500).json({
+          success: false,
+          message: 'API couldn not be reached'
+        })
+      })
     }
   },
 
+  /**
+   * Store new review
+   */
   storeReview: async (req, res) => {
 
     const review = Review.build(req)
@@ -102,6 +132,9 @@ module.exports = {
     }
   },
 
+  /**
+   * Get movies whose titles match someway the input text
+   */
   searchMovie: (req, res) => {
 
     const https = require('https')
