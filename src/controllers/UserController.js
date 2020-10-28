@@ -10,7 +10,10 @@ const getUsers = (req, res) =>{
     else{
       res.status(400).json({
         success: false,
-        message: 'Bad request'
+        data: null,
+        error: {
+          message: 'Bad request'
+        }
       })
       return
     }
@@ -23,16 +26,26 @@ const getUsers = (req, res) =>{
   })
     .then(users =>{
       users.length
-      ? res.status(200).json(users)
+      ? res.status(200).json({
+        success: true,
+        data: users,
+        error: null
+      })
       : res.status(404).json({
           success: false,
-          message: "User/s not found"
+          data: null,
+          error: {
+            message: "User/s not found"
+          }
       })
     })
     .catch(()=>{
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
@@ -96,9 +109,11 @@ const storeUser = async (req, res) => {
     res.status(422).json(err)
   } else {
     user.save()
-      .then(() => {
+      .then((data) => {
         res.status(200).json({
-          success: true
+          success: true,
+          data: data,
+          error: null
         })
       })
   }
@@ -116,16 +131,26 @@ const getUserById = (req, res) => {
   })
     .then((user) => {
       user
-        ? res.status(200).json(user) 
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        }) 
         : res.status(404).json({
             success: false,
-            message: "User not found"
+            data: null,
+            error: {
+              message: "User not found"
+            }
           })
     })
     .catch(() => {
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
@@ -141,17 +166,28 @@ const updateUser = (req, res) => {
       }
     })
   .then((row) => {
+    console.log("aa");
     row[0]
       ? res.status(200).json({
         success: true,
+        data: req.body,
         message: "User updated successfully"
       })
-      : res.status(204)
+      : res.status(404).json({
+        success: false,
+        data: null,
+        error: {
+          message: "User not found"
+        }
+      })
   })
   .catch(() => {
     res.status(500).json({
       success: false,
-      message: "The request could not be processed"
+      data: null,
+      error: {
+        message: "The request could not be processed"
+      }
     })
   })
 }
@@ -170,11 +206,16 @@ const deleteUser = (req, res) => {
       user
         ? res.status(200).json({
           success: true,
-          message: "User deleted correctly"
+          data: null,
+          message: "User deleted correctly",
+          error: null
         })
         : res.status(404).json({
-          success: true,
-          message: "User not found"
+          success: false,
+          data: null,
+          error: {
+            message: "User not found"
+          }
         })
     })
 }
@@ -193,16 +234,26 @@ const getUserReviews = (req, res)=>{
   })
     .then(user =>{
       user
-        ? res.status(200).json(user)
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        })
         : res.status(404).json({
           success: false,
-          message: "User not found"
+          data: null,
+          error: {
+            message: "User not found"
+          }
         })
     })
     .catch(()=>{
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
@@ -224,16 +275,26 @@ const getUserReview = (req, res)=>{
   })
     .then(user =>{
       user
-        ? res.status(200).json(user)
+        ? res.status(200).json({
+          success: true,
+          data: user,
+          error: null
+        })
         : res.status(404).json({
           success: false,
-          message: "User or Review not found"
+          data: null,
+          error: {
+            message: "User or Review not found"
+          }
         })
     })
     .catch(()=>{
       res.status(500).json({
         success: false,
-        message: "The request could not be processed"
+        data: null,
+        error: {
+          message: "The request could not be processed"
+        }
       })
     })
 }
