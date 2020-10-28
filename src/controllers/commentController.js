@@ -34,7 +34,9 @@ const storeComment = async (req, res) => {
   }
 }
 
-
+/**
+ * Get Comment By ID
+ */
 const getCommentById = (req, res) => {
   Comment.findOne({
     where: {
@@ -67,7 +69,9 @@ const getCommentById = (req, res) => {
     })
 }
 
-
+/**
+ * Update Comment
+ */
 const updateComment = (req, res) => {
   Comment.update(
     req.body, {
@@ -101,6 +105,9 @@ const updateComment = (req, res) => {
   })
 }
 
+/**
+ * Delete Comment
+ */
 const deleteComment = (req, res) => {
   Comment.destroy({
     where: {
@@ -123,4 +130,11 @@ const deleteComment = (req, res) => {
           }
         })
     })
+}
+
+module.exports = {
+  storeComment: storeComment,
+  getCommentById: getCommentById,
+  updateComment: updateComment,
+  deleteComment: deleteComment
 }
