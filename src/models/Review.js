@@ -38,8 +38,9 @@ module.exports = Review.init({
   createdAt:      'creation_date',
   dialect:        'mysql'
 })
-
 const Comment   = require('./Comment')
 const User      = require('./User')
+const ReviewTag = require('./Review-Tag')
 Review.hasMany(Comment, {foreignKey: 'comment_id'})
+Review.hasMany(ReviewTag, {foreignKey: 'review_id'})
 Review.belongsTo(User, {foreignKey: 'user_id'})
