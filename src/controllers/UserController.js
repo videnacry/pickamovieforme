@@ -3,10 +3,10 @@ const validationMessage   = require('./validationMessage')
 
 
 const getUsers = (req, res) =>{
-  let email = false
+  let username = false
   if(Object.keys(req.query).length){
-    if(req.query.email)
-      email = req.query.email 
+    if(req.query.username)
+      username = req.query.username 
     else{
       res.status(400).json({
         success: false,
@@ -18,7 +18,7 @@ const getUsers = (req, res) =>{
 
   User.findAll({
     where: {
-      email: email
+      username: username
     }
   })
     .then(users =>{
