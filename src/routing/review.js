@@ -22,10 +22,13 @@ const review = app => {
   //GET Reviews
   app.get('/reviews', ReviewController.getReviews)
 
+  //GET all Reviews
+  app.get('/reviews/all', ReviewController.getReviewsAll)
+
   // Get comment's reviews
   app.get('/reviews/:review_id/comments', function(req, res){
   })
 
 }
-// ReviewController.getReviews({query:{title:'tes'}},{})
+// ReviewController.getReviewsAll({},{})
 module.exports = review
