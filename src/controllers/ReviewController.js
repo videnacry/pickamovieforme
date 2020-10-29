@@ -119,7 +119,7 @@ module.exports = {
    */
   storeReview: async (req, res) => {
 
-    const review = Review.build(req)
+    const review = Review.build(req.body)
     const err = await validationMessage(review)
     if (err) {
       res.status(422).send(err)

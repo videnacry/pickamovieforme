@@ -3,7 +3,9 @@ const {
   DataTypes,
   Model
 } = require('sequelize');
-const sequelize = require('../database/db')
+const { Sequelize } = require('../database/db');
+const sequelize = require('../database/db');
+const Models = require('./Models');
 
   class Comment extends Model {}
 
@@ -24,7 +26,7 @@ module.exports = Comment.init({
   review_id:      DataTypes.INTEGER,
   user_id:        DataTypes.INTEGER,
   creation_date:  DataTypes.DATE,
-  update_date:    DataTypes.DATE
+  updated_date:    DataTypes.DATE
 }, {
   sequelize,
   modelName:  'comment',
@@ -33,3 +35,7 @@ module.exports = Comment.init({
   createdAt:  'creation_date',
   dialect:    'mysql'
 })
+// Comment.findAll({include:{model:'', where:{id:[sequelize.col]}}})
+// Comment.sequelize.op
+const user = require('./User')
+Comment.belongsTo(user, {foreignKey: 'user_id'})
