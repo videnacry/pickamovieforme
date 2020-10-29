@@ -106,7 +106,11 @@ const storeUser = async (req, res) => {
     err.push(usernameExist)
 
   if (err.length) {
-    res.status(422).json(err)
+    res.status(422).json({
+      success: false,
+      data: null,
+      error: err
+    })
   } else {
     user.save()
       .then((data) => {
@@ -166,12 +170,11 @@ const updateUser = (req, res) => {
       }
     })
   .then((row) => {
-    console.log("aa");
     row[0]
       ? res.status(200).json({
         success: true,
         data: req.body,
-        message: "User updated successfully"
+        error: null
       })
       : res.status(404).json({
         success: false,
