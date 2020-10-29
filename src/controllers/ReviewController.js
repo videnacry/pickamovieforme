@@ -212,5 +212,15 @@ module.exports = {
           message: "The request could not be processed"
         })
       })
+  },
+
+  /**
+   * get all reviews
+   */
+  getReviewsAll: async (req, res) => {
+    await Review.findAll()
+    .then(reviews => {
+      res.status(200).json(reviews)
+    })
   }
 }
