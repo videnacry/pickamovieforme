@@ -47,6 +47,9 @@ module.exports = {
       if (reviews.length) {
         const review = reviews[0]
         getTagCommentUser(review).then(values => {
+
+          values[0][0]['tags'] 
+
           review.tags = values[0][0]['tags'] || []
           review.comments = values[1] || []
 
@@ -217,10 +220,39 @@ module.exports = {
   /**
    * get all reviews
    */
-  getReviewsAll: async (req, res) => {
-    await Review.findAll()
-    .then(reviews => {
-      res.status(200).json(reviews)
+  getReviewsAll: (req, res) => {
+    const https = require('https')
+    let reviews = []
+    Review.findAll({attributes:['movie_id']})
+    .then(async select => {
+      // res.status(200).json(reviews)
+      let reviewsPromise = []
+      select.forEach(async row => {
+        reviewsPromise.push( new Promise((Resolve, Reject) => https.get('https://api.themoviedb.org/3/movie/' + row.movie_id
+        + '?api_key=1a20d213f4f948df52672a96ed05965a&language=en-US', get => {
+          let reviewJSON = ''
+          get.on('data', data => {
+            reviewJSON += data
+          })
+          get.on('end', () => {
+            const {poster_path, title} = JSON.parse(reviewJSON)
+            const review = {
+              img : 'https://image.tmdb.org/t/p/original' + poster_path,
+              title : title
+            }
+            reviews.push(review)
+            return Resolve('a')
+            // console.log(row.movie_id)
+            // console.log(reviews)
+            // console.log(review)
+          })
+        }))
+        // console.log(reviews)
+      )})
+      Promise.all(reviewsPromise).then((values) => {
+        // console.log(reviews)
+        res.status(200).json(reviews)
+      })
     })
   }
 }
