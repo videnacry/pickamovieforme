@@ -92,7 +92,17 @@ const usernameInUse = async (username) => {
  * Store User.
  */
 const storeUser = async (req, res) => {
-  const user = User.build(req.body)
+  var errors = []
+  for (const key in req.body) {
+    if (req.body[key] == null) {
+      const error = {success: false, path: key, message: "required", type: "Validation error"}
+      errors.push(error)
+    }
+  }
+  if(errors.length > 0){
+    res.status(400).json(errors)
+  }else{
+    const user = User.build(req.body)
   let err = await validationMessage(user)
   if(!err)
     err = []
@@ -106,20 +116,16 @@ const storeUser = async (req, res) => {
     err.push(usernameExist)
 
   if (err.length) {
-    res.status(422).json({
-      success: false,
-      data: null,
-      error: err
-    })
+    res.status(422).json(err)
   } else {
     user.save()
-      .then((data) => {
+      .then(() => {
         res.status(200).json({
-          success: true,
-          data: data,
-          error: null
+          success: true
         })
       })
+  }
+
   }
 }
 
