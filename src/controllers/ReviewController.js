@@ -48,10 +48,9 @@ module.exports = {
         const review = reviews[0]
         getTagCommentUser(review).then(values => {
 
-          values[0][0]['tags'] 
 
-          review.tags = values[0][0]['tags'] || []
-          review.comments = values[1] || []
+          review.dataValues.tags = (values[0][0])?values[0][0]['tags'] : []
+          review.dataValues.comments = values[1] || []
 
           // delete review.user._previousDataValues 
           // delete review.user._options
@@ -73,6 +72,7 @@ module.exports = {
             request.on('data', (data) => movies += data)
             request.on('end', () => {
               const { results } = JSON.parse(movies)
+              // console.log(results[0])
               res.status(200).json(results[0])
             })
           }))
