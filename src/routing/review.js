@@ -30,5 +30,6 @@ const review = app => {
   })
 
 }
-// ReviewController.getReviewsAll({},{})
+// ReviewController.getReviews({},{})
+ReviewController.getReviews({query:{title:"tes"}},{})
 module.exports = review
