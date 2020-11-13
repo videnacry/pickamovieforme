@@ -6,6 +6,7 @@ module.exports = {
    * Get review by title along with comments, users, tags, and some movie data
    */
   getReviews: async (req, res) => {
+
     let title = false
     if (Object.keys(req.query).length) {
       if (req.query.title)
@@ -39,18 +40,20 @@ module.exports = {
     }
 
     Review.findAll({
+      
       include: [require('../models/User')],
       where: {
         title: title
       }
     }).then(reviews => {
+      
       if (reviews.length) {
         const review = reviews[0]
         getTagCommentUser(review).then(values => {
-
-
-          review.dataValues.tags = (values[0][0])?values[0][0]['tags'] : []
-          review.dataValues.comments = values[1] || []
+          review.tags = values[0][0] ? values[0][0]['tags'] : []
+          // review.tags = values[0][0]['tags'] || []
+          review.comments = values[1] || []
+          // console.log(review.comments)
 
           // delete review.user._previousDataValues 
           // delete review.user._options
@@ -104,7 +107,7 @@ module.exports = {
               review.img = movie.poster_path,
                 review.overview = movie.overview,
                 review.releaseDate = movie.release_date
-              // console.log(review)
+              console.log(review)
               res.status(200).json(review)
             })
         })
@@ -121,17 +124,20 @@ module.exports = {
    * Store new review
    */
   storeReview: async (req, res) => {
-
+console.log(req.body)
     const review = Review.build(req.body)
     const err = await validationMessage(review)
     if (err) {
+      console.log(err)
       res.status(422).send(err)
     } else {
       review.save()
         .then(result => {
-          res.status(200).redirect('/login')
+          res.status(200)
+          // .redirect('/login')
+
         })
-        .catch(err => { res.status(422).send(err) })
+        .catch(err => { res.status(422).send(err); console.log(err)})
     }
   },
 

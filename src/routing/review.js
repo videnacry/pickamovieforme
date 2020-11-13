@@ -5,7 +5,7 @@ const ReviewController = require('../controllers/ReviewController')
  */
 const review = app => {
   // Store review
-  app.post('/reviews', ReviewController.storeReview)
+  app.put('/reviews', ReviewController.storeReview)
 
   app.get('/reviews/search/:title_text', ReviewController.searchMovie)
 
@@ -23,7 +23,7 @@ const review = app => {
   app.get('/reviews', ReviewController.getReviews)
 
   //GET all Reviews
-  app.get('/reviews/all', ReviewController.getReviewsAll)
+  app.post('/reviews', ReviewController.getReviewsAll)
 
   // Get comment's reviews
   app.get('/reviews/:review_id/comments', function(req, res){
@@ -31,5 +31,5 @@ const review = app => {
 
 }
 // ReviewController.getReviews({},{})
-ReviewController.getReviews({query:{title:"tes"}},{})
+// ReviewController.getReviews({query:{title:"tes"}},{})
 module.exports = review

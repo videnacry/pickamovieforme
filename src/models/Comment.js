@@ -26,11 +26,7 @@ module.exports = Comment.init({
   review_id:      DataTypes.INTEGER,
   user_id:        DataTypes.INTEGER,
   creation_date:  DataTypes.DATE,
-<<<<<<< HEAD
   updated_date:    DataTypes.DATE
-=======
-  updated_date:   DataTypes.DATE
->>>>>>> e32211a1fb5222f7d66842fc5b75a2cd09123a39
 }, {
   sequelize,
   modelName:  'comment',
